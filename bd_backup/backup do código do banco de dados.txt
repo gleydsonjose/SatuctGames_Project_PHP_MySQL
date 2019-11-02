@@ -1,0 +1,81 @@
+CREATE DATABASE sg_project
+DEFAULT CHARACTER SET utf8
+COLLATE utf8_unicode_ci;
+
+USE sg_project;
+
+CREATE TABLE usuarios(
+	id INT AUTO_INCREMENT NOT NULL,
+	nome VARCHAR(30) NOT NULL,
+	sobrenome VARCHAR(30) NOT NULL,
+	email VARCHAR(70) NOT NULL,
+	senha VARCHAR(255) NOT NULL,
+	cep INT(9) NOT NULL,
+	cidade VARCHAR(100) NOT NULL,
+	endereco VARCHAR(100) NOT NULL,
+	numero INT(20) NOT NULL,
+	bairro VARCHAR(100) NOT NULL,
+	complemento VARCHAR(100) NOT NULL,
+	estado VARCHAR(100) NOT NULL,
+	telefone INT(30) NOT NULL,
+	token VARCHAR(255) NOT NULL,
+	novasenha_permissao BOOLEAN NOT NULL,
+	datadecadastro DATETIME,
+	PRIMARY KEY(id)
+) CHARACTER SET utf8 COLLATE utf8_general_ci;
+
+CREATE TABLE cupons(
+	id INT AUTO_INCREMENT NOT NULL,
+	cupom VARCHAR(255) NOT NULL,
+	desconto TINYINT(3),
+	datadecriacao DATETIME,
+	PRIMARY KEY(id)
+) CHARACTER SET utf8 COLLATE utf8_general_ci;
+
+CREATE TABLE games(
+	id INT AUTO_INCREMENT NOT NULL,
+	nome_game VARCHAR(255) NOT NULL,
+	imagem VARCHAR(255) NOT NULL,
+	nome_url_pagina VARCHAR(255) NOT NULL,
+	titulo_pagina VARCHAR(255) NOT NULL,
+	categoria VARCHAR(255) NOT NULL,
+	informacoes TEXT NOT NULL,
+	disponibilidade BOOLEAN NOT NULL,
+	promocao BOOLEAN NOT NULL,
+	lancamento BOOLEAN NOT NULL,
+	quantidade INT NOT NULL,
+	preco_atual VARCHAR(100) NOT NULL,
+	preco_antigo VARCHAR(100) NOT NULL,
+	PRIMARY KEY(id)
+) CHARACTER SET utf8 COLLATE utf8_general_ci;
+
+CREATE TABLE avaliacoes(
+	id INT AUTO_INCREMENT NOT NULL,
+	avaliacao VARCHAR(400) NOT NULL,
+	classificacao TINYINT(1) NOT NULL,
+	horario DATETIME,
+	PRIMARY KEY(id),
+	pk_id_usuario INT NOT NULL,
+	FOREIGN KEY(pk_id_usuario) REFERENCES usuarios(id),
+	pk_id_game INT NOT NULL,
+	FOREIGN KEY(pk_id_game) REFERENCES games(id)
+) CHARACTER SET utf8 COLLATE utf8_general_ci;
+
+CREATE TABLE transacoes(
+	id INT AUTO_INCREMENT NOT NULL,
+	nome_usuario VARCHAR(30) NOT NULL,
+	jogos_comprados TEXT NOT NULL,
+	total FLOAT NOT NULL,
+	metodo_pagamento VARCHAR(50) NOT NULL,
+	metodo_entrega VARCHAR(50) NOT NULL,
+	frete FLOAT NOT NULL,
+	prazo_entrega INT(30) NOT NULL,
+	pagamento BOOLEAN NOT NULL,
+	datadecompra DATETIME,
+	PRIMARY KEY(id),
+	pk_id_usuario INT NOT NULL,
+	FOREIGN KEY(pk_id_usuario) REFERENCES usuarios(id),
+	pk_id_game INT NOT NULL,
+	FOREIGN KEY(pk_id_game) REFERENCES games(id),
+	id_transacao_carrinho INT NOT NULL
+) CHARACTER SET utf8 COLLATE utf8_general_ci;
